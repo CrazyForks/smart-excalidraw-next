@@ -1,200 +1,124 @@
 # Smart Excalidraw
 
-AI-powered diagram generation using Excalidraw and Large Language Models.
+基于 AI 大语言模型的智能图表生成工具，使用 Excalidraw 实现自然语言到可视化图表的转换。
 
-## Features
+## ✨ 功能特性
 
-- 🤖 **AI-Powered Generation**: Use OpenAI or Anthropic models to generate diagrams from natural language descriptions
-- 🎨 **Interactive Canvas**: Full Excalidraw integration for viewing and editing generated diagrams
-- 💬 **Chat Interface**: Conversational interface for iterative diagram creation
-- 📝 **Code Editor**: Monaco-based editor to view and modify generated Excalidraw code
-- ⚙️ **Flexible Configuration**: Support for multiple LLM providers (OpenAI, Anthropic)
-- 💾 **Local Storage**: Configurations persist in your browser
+- 🤖 **AI 驱动生成** - 支持 OpenAI 和 Anthropic 大模型，通过自然语言描述生成专业图表
+- 🎨 **交互式画布** - 完整集成 Excalidraw，可实时查看和编辑生成的图表
+- 📝 **代码编辑器** - 基于 Monaco 的代码编辑器，可查看和修改生成的 Excalidraw 代码
+- ⚙️ **灵活配置** - 支持多种 LLM 提供商（OpenAI、Anthropic）的灵活配置
+- 💾 **本地存储** - 配置信息保存在浏览器本地，无需后端数据库
 
-## Getting Started
+## 📖 使用指南
 
-### Prerequisites
+在线网站 [http://localhost:3000](http://localhost:3000)
 
-- Node.js 18+ or pnpm
-- An API key from OpenAI or Anthropic
+### 配置 LLM 提供商
 
-### Installation
+1. 点击右上角的 **"配置 LLM"** 按钮
+2. 填写配置表单：
+   - **提供商名称**：为配置起一个友好的名称
+   - **提供商类型**：选择 OpenAI 或 Anthropic
+   - **Base URL**：API 端点地址（如 `https://api.openai.com/v1` 或 `https://api.anthropic.com/v1`）
+   - **API Key**：你的 API 密钥
+3. 点击 **"加载可用模型"** 获取可用模型列表
+4. 从下拉菜单中选择一个模型或者自己填入模型id
+5. 点击 **"保存配置"**
 
-1. Clone the repository:
+### 创建图表
+
+1. **输入描述**：在聊天输入框中输入你的图表需求
+   - 示例："创建一个用户认证流程图"
+
+2. **查看生成的代码**：AI 会生成 Excalidraw 代码并显示在代码编辑器中
+
+3. **查看图表**：图表会自动在画布上渲染
+
+4. **编辑和调整**：
+   - 在代码编辑器中修改代码
+   - 点击"应用到画布"按钮更新图表
+
+
+## 🚀 快速开始
+
+### 环境要求
+
+- Node.js 18+ 
+- pnpm（推荐）或 npm
+- OpenAI 或 Anthropic 的 API 密钥
+
+### 安装和运行
+
 ```bash
+# 克隆项目
 git clone <your-repo-url>
 cd smart-excalidraw-next
-```
 
-2. Install dependencies:
-```bash
+# 安装依赖
 pnpm install
-```
 
-3. Run the development server:
-```bash
+# 开发模式
 pnpm dev
-```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-### Configuration
-
-1. Click the **"Configure LLM"** button in the top-right corner
-2. Fill in the configuration form:
-   - **Provider Name**: A friendly name for your configuration
-   - **Provider Type**: Choose between OpenAI or Anthropic
-   - **Base URL**: API endpoint (e.g., `https://api.openai.com/v1` or `https://api.anthropic.com/v1`)
-   - **API Key**: Your API key
-3. Click **"Load Available Models"** to fetch available models
-4. Select a model from the dropdown
-5. Click **"Save Configuration"**
-
-## Usage
-
-### Creating Diagrams
-
-1. **Enter a Description**: Type your diagram request in the chat input
-   - Example: "Create a flowchart for user authentication"
-   - Example: "Draw a mind map about machine learning concepts"
-   - Example: "Generate an architecture diagram for a microservices system"
-
-2. **View Generated Code**: The AI will generate Excalidraw code displayed in the code editor
-
-3. **See the Diagram**: The diagram automatically renders on the canvas
-
-4. **Edit if Needed**: 
-   - Modify the code in the editor
-   - Click "Apply to Canvas" to update the diagram
-   - Or continue the conversation to refine the diagram
-
-### Layout
-
-- **Left Panel (Top)**: Chat interface for conversation with AI
-- **Left Panel (Bottom)**: Code editor showing generated Excalidraw code
-- **Right Panel**: Excalidraw canvas displaying the diagram
-- **Resizable**: Drag the divider between chat and code editor to adjust sizes
-
-## Diagram Types Supported
-
-- **Flowcharts**: Process flows and decision trees
-- **Mind Maps**: Hierarchical concept relationships
-- **Architecture Diagrams**: System components and connections
-- **Concept Maps**: Knowledge structures with labeled relationships
-- **Timelines**: Sequential events and milestones
-- **Network Diagrams**: Node and edge relationships
-
-## Technical Stack
-
-- **Framework**: Next.js 16 (App Router)
-- **UI**: Tailwind CSS
-- **Diagram Engine**: @excalidraw/excalidraw
-- **Code Editor**: @monaco-editor/react
-- **LLM Integration**: OpenAI & Anthropic APIs
-
-## Project Structure
-
-```
-├── app/
-│   ├── api/
-│   │   ├── generate/      # Code generation API endpoint
-│   │   └── models/        # Model listing API endpoint
-│   ├── page.js            # Main application page
-│   └── layout.js          # Root layout
-├── components/
-│   ├── Chat.jsx           # Chat interface component
-│   ├── CodeEditor.jsx     # Monaco code editor component
-│   ├── ConfigModal.jsx    # LLM configuration modal
-│   └── ExcalidrawCanvas.jsx # Excalidraw canvas wrapper
-├── lib/
-│   ├── config.js          # Configuration management
-│   ├── llm-client.js      # LLM API client
-│   └── prompts.js         # System prompts
-└── docs/
-    ├── excalidraw-doc.md  # Excalidraw API documentation
-    └── requirement.md     # Project requirements
-```
-
-## API Endpoints
-
-### POST /api/generate
-Generate Excalidraw code from user input.
-
-**Request Body:**
-```json
-{
-  "config": {
-    "type": "openai",
-    "baseUrl": "https://api.openai.com/v1",
-    "apiKey": "sk-...",
-    "model": "gpt-4"
-  },
-  "messages": [],
-  "userInput": "Create a flowchart..."
-}
-```
-
-**Response:** Server-Sent Events (SSE) stream with generated code
-
-### GET /api/models
-Fetch available models from the configured provider.
-
-**Query Parameters:**
-- `type`: Provider type (openai/anthropic)
-- `baseUrl`: API base URL
-- `apiKey`: API key
-
-**Response:**
-```json
-{
-  "models": [
-    { "id": "gpt-4", "name": "gpt-4" }
-  ]
-}
-```
-
-## Development
-
-### Build for Production
-
-```bash
+# 构建生产版本
 pnpm build
-```
 
-### Run Production Build
-
-```bash
+# 运行生产版本
 pnpm start
-```
 
-### Lint
-
-```bash
+# 代码检查
 pnpm lint
 ```
 
-## Notes
 
-- All configuration is stored in browser localStorage
-- No data is sent to any server except the configured LLM provider
-- The application requires a valid LLM API key to function
-- Streaming responses provide real-time feedback during generation
 
-## Troubleshooting
 
-### "Please configure your LLM provider first"
-- Click "Configure LLM" and enter your API credentials
 
-### "Failed to generate code"
-- Check your API key is valid
-- Verify the base URL is correct
-- Ensure you have API credits available
+## 🛠️ 技术栈
 
-### Diagram not rendering
-- Check the generated code in the editor for syntax errors
-- Try clicking "Apply to Canvas" manually
-- Look for errors in the browser console
+- **框架**：Next.js 16 (App Router)
+- **UI 框架**：Tailwind CSS 4
+- **图表引擎**：@excalidraw/excalidraw
+- **代码编辑器**：@monaco-editor/react
+- **LLM 集成**：OpenAI & Anthropic APIs
+- **React 版本**：React 19.2
 
-## License
+## 📝 注意事项
 
-MIT
+- 所有配置信息存储在浏览器的 localStorage 中
+- 除了与配置的 LLM 提供商通信外，不会向任何服务器发送数据
+- 应用需要有效的 LLM API 密钥才能正常工作
+
+## ❓ 常见问题
+
+### 图表无法渲染
+
+- 检查代码编辑器中生成的代码是否有语法错误
+- 尝试手动点击"应用到画布"按钮
+- 查看浏览器控制台中的错误信息
+
+### 箭头连接不准确
+
+- 系统会自动优化箭头连接点
+- 确保元素的绑定关系在代码中正确定义
+- 可以手动调整图形的位置以及箭头的位置来校正
+
+## 📚 更多资源
+
+- [Excalidraw 官方文档](https://docs.excalidraw.com/)
+- [OpenAI API 文档](https://platform.openai.com/docs)
+- [Anthropic API 文档](https://docs.anthropic.com/)
+- [Next.js 文档](https://nextjs.org/docs)
+
+## 🤝 贡献
+
+欢迎提交 Issue 和 Pull Request！
+
+## 📄 许可证
+
+MIT License
+
+---
+
+**Powered by AI** 🚀 使用大语言模型将想法转化为可视化图表

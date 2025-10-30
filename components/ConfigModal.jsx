@@ -13,12 +13,20 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
   const [models, setModels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [useCustomModel, setUseCustomModel] = useState(false);
 
   useEffect(() => {
     if (initialConfig) {
       setConfig(initialConfig);
+      // 如果初始配置中的模型不在加载的模型列表中，则使用自定义输入模式
+      if (initialConfig.model && models.length > 0) {
+        const modelExists = models.some(m => m.id === initialConfig.model);
+        setUseCustomModel(!modelExists);
+      } else if (initialConfig.model && models.length === 0) {
+        setUseCustomModel(true);
+      }
     }
-  }, [initialConfig]);
+  }, [initialConfig, models]);
 
   const handleLoadModels = async () => {
     if (!config.type || !config.baseUrl || !config.apiKey) {
@@ -44,8 +52,15 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
       }
 
       setModels(data.models);
-      if (data.models.length > 0 && !config.model) {
-        setConfig(prev => ({ ...prev, model: data.models[0].id }));
+      if (data.models.length > 0) {
+        // 如果当前模型不在新加载的列表中，切换到列表选择模式
+        if (config.model && !data.models.some(m => m.id === config.model)) {
+          setUseCustomModel(false);
+          setConfig(prev => ({ ...prev, model: data.models[0].id }));
+        } else if (!config.model && !useCustomModel) {
+          // 如果没有选择模型且不是手动输入模式，自动选择第一个
+          setConfig(prev => ({ ...prev, model: data.models[0].id }));
+        }
       }
     } catch (err) {
       setError(err.message);
@@ -167,11 +182,45 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
           </div>
 
           {/* Model Selection */}
-          {models.length > 0 && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                选择模型 <span className="text-red-500">*</span>
-              </label>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              模型 <span className="text-red-500">*</span>
+            </label>
+            
+            {/* Toggle between selection and custom input */}
+            {models.length > 0 && (
+              <div className="mb-2 flex items-center space-x-4">
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    checked={!useCustomModel}
+                    onChange={() => {
+                      setUseCustomModel(false);
+                      if (models.length > 0) {
+                        setConfig({ ...config, model: models[0].id });
+                      }
+                    }}
+                    className="mr-2"
+                  />
+                  <span className="text-sm text-gray-700">从列表选择</span>
+                </label>
+                <label className="flex items-center cursor-pointer">
+                  <input
+                    type="radio"
+                    checked={useCustomModel}
+                    onChange={() => {
+                      setUseCustomModel(true);
+                      setConfig({ ...config, model: '' });
+                    }}
+                    className="mr-2"
+                  />
+                  <span className="text-sm text-gray-700">手动输入</span>
+                </label>
+              </div>
+            )}
+
+            {/* Model Selection Dropdown */}
+            {models.length > 0 && !useCustomModel && (
               <select
                 value={config.model}
                 onChange={(e) => setConfig({ ...config, model: e.target.value })}
@@ -183,8 +232,19 @@ export default function ConfigModal({ isOpen, onClose, onSave, initialConfig }) 
                   </option>
                 ))}
               </select>
-            </div>
-          )}
+            )}
+
+            {/* Custom Model Input */}
+            {(useCustomModel || models.length === 0) && (
+              <input
+                type="text"
+                value={config.model}
+                onChange={(e) => setConfig({ ...config, model: e.target.value })}
+                placeholder="例如：gpt-4、claude-3-opus-20240229"
+                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-gray-900"
+              />
+            )}
+          </div>
         </div>
 
         {/* Footer */}

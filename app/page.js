@@ -6,6 +6,7 @@ import Chat from '@/components/Chat';
 import CodeEditor from '@/components/CodeEditor';
 import ConfigModal from '@/components/ConfigModal';
 import { getConfig, saveConfig, isConfigValid } from '@/lib/config';
+import { optimizeExcalidrawCode } from '@/lib/optimizeArrows';
 
 // Dynamically import ExcalidrawCanvas to avoid SSR issues
 const ExcalidrawCanvas = dynamic(() => import('@/components/ExcalidrawCanvas'), {
@@ -171,6 +172,11 @@ export default function Home() {
       // Try to parse and apply the generated code (already post-processed)
       const processedCode = postProcessExcalidrawCode(accumulatedCode);
       tryParseAndApply(processedCode);
+      
+      // Automatically optimize the generated code
+      const optimizedCode = optimizeExcalidrawCode(processedCode);
+      setGeneratedCode(optimizedCode);
+      tryParseAndApply(optimizedCode);
     } catch (error) {
       console.error('Error generating code:', error);
       alert('生成代码失败：' + error.message);
@@ -204,6 +210,13 @@ export default function Home() {
   // Handle applying code from editor
   const handleApplyCode = () => {
     tryParseAndApply(generatedCode);
+  };
+
+  // Handle optimizing code
+  const handleOptimizeCode = () => {
+    const optimizedCode = optimizeExcalidrawCode(generatedCode);
+    setGeneratedCode(optimizedCode);
+    tryParseAndApply(optimizedCode);
   };
 
   // Handle clearing code
@@ -292,6 +305,7 @@ export default function Home() {
               code={generatedCode}
               onChange={setGeneratedCode}
               onApply={handleApplyCode}
+              onOptimize={handleOptimizeCode}
               onClear={handleClearCode}
             />
           </div>
