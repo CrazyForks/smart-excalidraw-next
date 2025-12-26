@@ -21,7 +21,7 @@ https://github.com/liujuntao123/ai-draw-nexus
 
 🚀 限时福利
 
-添加底部作者微信进群可领取免费claude-4.5-sonnet key
+添加底部作者微信进群可领取免费访问密码，畅用claude 最新模型。
 
 ## English Version
 Read the English version: [README_EN.md](README_EN.md)
